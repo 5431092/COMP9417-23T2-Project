@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import pickle
 
+# Define the column datatypes
 dtypes={
     'elapsed_time':np.int32,
     'event_name':'category',
@@ -22,16 +23,19 @@ dtypes={
     'level_group':'category'
 }
 
+# Load the dataset
 dataset_df = pd.read_csv('./input/train.csv', dtype=dtypes)
 with open('./data/dataset_df.pkl', 'wb') as file:
     pickle.dump(dataset_df, file)
 
+# Load the labels
 labels = pd.read_csv('./input/train_labels.csv')
 labels['session'] = labels.session_id.apply(lambda x: int(x.split('_')[0]))
 labels['q'] = labels.session_id.apply(lambda x: int(x.split('_')[-1][1:]))
 with open('./data/labels.pkl', 'wb') as file:
     pickle.dump(labels, file)
 
+# Load the users and save the true labels
 ALL_USERS = dataset_df['session_id'].drop_duplicates().values
 true = pd.DataFrame(data=np.zeros((len(ALL_USERS),18)), index=ALL_USERS)
 for k in range(18):

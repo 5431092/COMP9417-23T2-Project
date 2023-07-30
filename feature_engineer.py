@@ -8,6 +8,25 @@ EVENTS = ['navigate_click','person_click','cutscene_click','object_click',
           'checkpoint']
 
 def feature_engineer1(dataset_df):
+    """
+    Generate engineered features from the given dataset.
+
+    Parameters:
+    - dataset_df (pandas DataFrame): The input dataset.
+
+    Returns:
+    - dataset_df (pandas DataFrame): The dataset with engineered features.
+
+    Description:
+    - This function takes a dataset as input and performs feature engineering by calculating
+      various statistics for different columns grouped by session_id and level_group.
+    - For each categorical feature, it calculates the number of unique values and appends it to
+      the dataframe with '_nunique' suffix added to the column name.
+    - For each numerical feature, it calculates the mean and standard deviation and appends them
+      to the dataframe with '_mean' and '_std' suffixes added to the column names respectively.
+    - The resulting dataframe is then filled with -1 for missing values, reset the index and set
+      the session_id as the new index, and returned as the output.
+    """
     dfs = []
     for c in CATEGORICAL:
         tmp = dataset_df.groupby(['session_id','level_group'])[c].agg('nunique')
@@ -29,6 +48,15 @@ def feature_engineer1(dataset_df):
     return dataset_df
 
 def feature_engineer2(dataset_df):
+    """
+    Generates features for the dataset.
+
+    Parameters:
+    - dataset_df: The dataset DataFrame to perform feature engineering on.
+
+    Returns:
+    - dataset_df: The dataset DataFrame with the engineered features.
+    """
     dfs = []
     for c in CATEGORICAL:
         tmp = dataset_df.groupby(['session_id','level_group'])[c].agg('nunique')
